@@ -17,13 +17,5 @@ class PostgresSettings(BaseSettings):
 class Settings(BaseSettings):
     postgres: PostgresSettings
 
-    class Config:
-        #  Для локальной разработки вне docker
-        env_file = (
-            os.path.join(ENV_DIR, ".env.prod"),
-            os.path.join(ENV_DIR, ".env.dev"),
-        )
-        env_nested_delimiter = "__"
-
 
 settings = Settings()
