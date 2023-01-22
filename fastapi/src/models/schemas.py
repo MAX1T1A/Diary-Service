@@ -1,48 +1,50 @@
-from typing import List, Optional
+from typing import Optional
 
 from pydantic import BaseModel
 
 
-class PageBase(BaseModel):
+class PageBaseSchemas(BaseModel):
+    diary_id: int
     name: str
     body: str
 
 
-class Page(PageBase):
-    class Config:
-        orm_mode = True
+# class PageSchemas(PageBaseSchemas):
+#     class Config:
+#         orm_mode = True
 
 
-class Diary(BaseModel):
+class DiarySchemas(BaseModel):
+    user_id: int
     name: str
 
 
-class ShowDiary(BaseModel):
-    name: str
-    page: Optional[Page]
+# class ShowDiarySchemas(BaseModel):
+#     name: str
+#     page: Optional[PageSchemas]
 
 
-class User(BaseModel):
+class UserSchemas(BaseModel):
     email: str
     name: str
     password: str
 
 
-class ShowUser(BaseModel):
-    name: str
-    email: str
-    diary: Optional[Diary]
-
-    class Config:
-        orm_mode = True
-
-
-class ShowPage(BaseModel):
-    name: str
-    body: str
-    creator: ShowUser
+# class ShowUserSchemas(BaseModel):
+#     name: str
+#     email: str
+#     diary: Optional[DiarySchemas]
+#
+#     class Config:
+#         orm_mode = True
 
 
-class Login(BaseModel):
-    name: str
-    password: str
+# class ShowPageSchemas(BaseModel):
+#     name: str
+#     body: str
+#     creator: ShowUserSchemas
+
+
+# class LoginSchemas(BaseModel):
+#     name: str
+#     password: str
