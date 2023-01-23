@@ -11,8 +11,7 @@ class User(Base):
     email = Column(String(120), nullable=False)
     name = Column(String(120), nullable=False)
     password = Column(String(50), nullable=False)
-    # registration_date = Column(DateTime)
-    diary_name = relationship('Diary', lazy='joined', back_populates='user_name')
+    diary_info = relationship('Diary', lazy='joined', back_populates='user_info')
 
 
 class Diary(Base):
@@ -21,8 +20,8 @@ class Diary(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False)
     user_id = Column(Integer, ForeignKey(User.id), index=True)
-    page_name = relationship('Page', lazy='joined', back_populates='diary')
-    user_name = relationship('User', lazy='joined', back_populates='diary_name')
+    page_info = relationship('Page', lazy='joined', back_populates='diary_info_for_page')
+    user_info = relationship('User', lazy='joined', back_populates='diary_info')
 
 
 
@@ -33,6 +32,6 @@ class Page(Base):
     name = Column(String(120))
     body = Column(Text)
     diary_id = Column(Integer, ForeignKey(Diary.id), index=True)
-    diary = relationship('Diary', lazy='joined', back_populates='page_name')
+    diary_info_for_page = relationship('Diary', lazy='joined', back_populates='page_info')
 
 

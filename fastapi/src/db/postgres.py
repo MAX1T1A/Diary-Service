@@ -1,24 +1,19 @@
-import os
-
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
 
-from dotenv import load_dotenv
+from core.config import settings
 
-load_dotenv()
+db_uri = (
+    "postgresql://"
+    f"{settings.postgres.user}:{settings.postgres.password}@"
+    f"{settings.postgres.host}:{settings.postgres.port}/"
+    f"{settings.postgres.dbname}"
+)
 
-basedir = os.path.abspath(os.path.dirname(__file__))
-
-SQLALCHEMY_DATABASE_URI = 'postgres:///' + os.path.join(basedir, 'app.db')
-SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repository')
-
-engine = create_engine(f'postgresql+psycopg2://{os.getenv("POSTGRES__USER")}:{os.getenv("POSTGRES__PASSWORD")}'
-                       f'@{os.getenv("POSTGRES__HOST")}:{os.getenv("POSTGRES__PORT")}/{os.getenv("POSTGRES__DBNAME")}',
-                       pool_pre_ping=True)
-engine.connect()
-
-db_session = scoped_session(sessionmaker(bind=engine))
+db = create_engine(db_uri, convert_unicode=True, pool_size=20, max_overflow=0)
+Session = sessionmaker(bind=db, autocommit=False, autoflush=False)
+db_session = scoped_session(Session)
 
 Base = declarative_base()
 Base.query = db_session.query_property()
