@@ -5,7 +5,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 from core.config import settings
 
 db_uri = (
-    "postgresql://"
+    "postgresql+psycopg2://"
     f"{settings.postgres.user}:{settings.postgres.password}@"
     f"{settings.postgres.host}:{settings.postgres.port}/"
     f"{settings.postgres.dbname}"
@@ -16,4 +16,3 @@ db_session = scoped_session(Session)
 
 Base = declarative_base()
 Base.query = db_session.query_property()
-
