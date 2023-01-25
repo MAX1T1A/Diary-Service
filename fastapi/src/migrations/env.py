@@ -5,10 +5,11 @@ from logging.config import fileConfig
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
-from db.postgres import Base, db_uri, db_session
+from db.postgres import Base, db_uri, init_db
+
 
 sys.path.append(os.path.join(os.getcwd(), ".."))
-db_session()
+init_db()
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

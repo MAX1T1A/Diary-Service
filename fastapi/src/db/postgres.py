@@ -17,3 +17,6 @@ db_session = scoped_session(Session)
 
 Base = declarative_base()
 Base.query = db_session.query_property()
+
+def init_db():
+    from models.models import User, Diary, Page
