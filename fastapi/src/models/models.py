@@ -10,7 +10,7 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     email = Column(String(120), nullable=False)
     name = Column(String(120), nullable=False)
-    password = Column(String(50), nullable=False)
+    password = Column(String(120), nullable=False)
     diary_info = relationship('Diary', lazy='joined', back_populates='user_info')
 
 
@@ -24,7 +24,6 @@ class Diary(Base):
     user_info = relationship('User', lazy='joined', back_populates='diary_info')
 
 
-
 class Page(Base):
     __tablename__ = 'page'
 
@@ -33,5 +32,3 @@ class Page(Base):
     body = Column(Text)
     diary_id = Column(Integer, ForeignKey(Diary.id), index=True)
     diary_info_for_page = relationship('Diary', lazy='joined', back_populates='page_info')
-
-
