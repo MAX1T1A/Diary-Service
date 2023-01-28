@@ -4,9 +4,9 @@ from sqlalchemy.orm import Session
 from models.schemas import UserIn
 from repository.user import create
 
-router = APIRouter(prefix="/register", tags=['Auth'])
+router = APIRouter(tags=['Auth'])
 
 
-@router.post('/')
+@router.post('/register')
 def create_user(request: UserIn, db: Session = Depends(get_db)):
     return create(request, db)
