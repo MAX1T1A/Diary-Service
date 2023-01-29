@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Text
 from sqlalchemy.orm import relationship
 
-from db.postgres import Base, db
+from db.postgres import Base
 
 
 class User(Base):
@@ -32,7 +32,3 @@ class Page(Base):
     body = Column(Text)
     diary_id = Column(Integer, ForeignKey(Diary.id), index=True)
     diary_info_for_page = relationship('Diary', lazy='joined', back_populates='page_info')
-
-
-if __name__ == "__main__":
-    Base.metadata.create_all(bind=db)
