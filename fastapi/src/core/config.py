@@ -6,6 +6,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ENV_DIR = os.path.join(BASE_DIR, "..", "..")
 
 
+class JWTSettings(BaseSettings):
+    secret_key: str
+    algorithm: str
+    active_time: int
+
+
 class PostgresSettings(BaseSettings):
     host: str
     port: int
@@ -16,6 +22,7 @@ class PostgresSettings(BaseSettings):
 
 class Settings(BaseSettings):
     postgres: PostgresSettings
+    jwt_token: JWTSettings
 
     class Config:
         #  Для локальной разработки вне docker
