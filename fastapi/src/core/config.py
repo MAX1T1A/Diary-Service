@@ -1,6 +1,7 @@
 import os
 
-from pydantic import BaseSettings
+from pydantic import BaseSettings, BaseModel
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ENV_DIR = os.path.join(BASE_DIR, "..", "..")
@@ -14,8 +15,14 @@ class PostgresSettings(BaseSettings):
     password: str
 
 
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
 class Settings(BaseSettings):
     postgres: PostgresSettings
+    token: Token
 
     class Config:
         #  Для локальной разработки вне docker

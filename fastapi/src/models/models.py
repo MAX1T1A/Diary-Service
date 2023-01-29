@@ -10,7 +10,7 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     email = Column(String(120), nullable=False)
     name = Column(String(120), nullable=False)
-    password = Column(String(120), nullable=False)
+    password = Column(String(255), nullable=False)
     diary_info = relationship('Diary', lazy='joined', back_populates='user_info')
 
 

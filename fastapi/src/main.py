@@ -1,9 +1,10 @@
 from fastapi import FastAPI
-from api.v1 import user
+from api.v1 import user, jwt
 import uvicorn
 
 app = FastAPI(title="Diary API")
 app.include_router(user.router)
+app.include_router(jwt.router)
 
 
 if __name__ == "__main__":
