@@ -1,12 +1,17 @@
 from fastapi import APIRouter, Depends
 from db.postgres import get_db
 from sqlalchemy.orm import Session
-from models.schemas import UserIn
-from repository.user import create
+from models.schemas import UserInSchemas, Login
+from repository.user import create, login
 
 router = APIRouter(tags=['Auth'])
 
 
-@router.post('/register')
-def create_user(request: UserIn, db: Session = Depends(get_db)):
+@router.post("/register")
+def create_user(request: UserInSchemas, db: Session = Depends(get_db)):
     return create(request, db)
+
+
+@router.post("/login")
+def login_user(request: Login, db: Session = Depends(get_db)):
+    return login(request, db)
