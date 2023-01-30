@@ -1,9 +1,9 @@
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 from models.models import User
-from models.schemas import UserInSchemas, Login, Token
+from models.schemas import UserInSchemas, Login
 from core.hashing import Hash
-from repository import token
+from api.v1.utils.create_token import create_token
 
 
 def create(request: UserInSchemas, db: Session) -> User:
@@ -21,7 +21,7 @@ def create(request: UserInSchemas, db: Session) -> User:
     return new_user
 
 
-def login(request: Login, db: Session) -> Token:
+def login(request: Login, db: Session) -> dict[str | str: any]:
     user = db.query(User).filter(User.email == request.email).first()
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"This user is not registered")
@@ -30,5 +30,5 @@ def login(request: Login, db: Session) -> Token:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Password or login was entered incorrectly")
 
-    access_token = token.create_access_token(data={"sub": user.id})
+    access_token = create_token(data={"sub": user.id})
     return {"access_token": access_token, "token_type": "bearer"}

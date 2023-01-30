@@ -8,7 +8,7 @@ class User(Base):
     __tablename__ = 'user'
 
     id = Column(Integer, primary_key=True)
-    email = Column(String(120), nullable=False)
+    email = Column(String(120), nullable=False, unique=True)
     name = Column(String(120), nullable=False)
     password = Column(String(120), nullable=False)
     diary_info = relationship('Diary', lazy='joined', back_populates='user_info')
