@@ -4,6 +4,7 @@ from pydantic import BaseModel
 class DiaryBase(BaseModel):
     name: str
     description: str
+    user_id: int
 
 
 class DiaryCreate(DiaryBase):
