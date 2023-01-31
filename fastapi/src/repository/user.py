@@ -8,7 +8,7 @@ from api.v1.utils.create_token import create_token
 
 def create(request: UserInSchemas, db: Session) -> User:
     new_user = User(
-        user_name=request.user_name,
+        name=request.name,
         email=request.email,
         password=Hash().bcrypt(request.password)
     )

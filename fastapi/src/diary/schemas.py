@@ -2,8 +2,7 @@ from pydantic import BaseModel
 
 
 class DiaryBase(BaseModel):
-    diary_name: str
-    diary_description: str
+    name: str
     user_id: int
 
     class Config:
@@ -23,7 +22,7 @@ class DiaryGet(DiaryBase):
 
 
 class PageBase(BaseModel):
-    page_name: str
+    name: str
     note_content: str
     diary_id: int
 
