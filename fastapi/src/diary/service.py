@@ -20,6 +20,5 @@ def create_page(db: Session, item: PageBase):
     return db_item
 
 
-def get_diary(db: Session):
-    return db.query(Diary).all()
-
+def get_diary(db: Session, user: int):
+    return db.query(Diary).filter(Diary.user_id).all()

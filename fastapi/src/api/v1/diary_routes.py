@@ -15,14 +15,15 @@ router = APIRouter(tags=['Diary'])
 async def create_diary(
         item: schemas.DiaryCreate,
         db: Session = Depends(get_db),
-        user_id: User = Depends(JWTBearer)):
-    item.user_id = str(user_id)
+        user_id: User = Depends(JWTBearer())):
+    item.user_id = int(user_id)
     return service.create_diary(db=db, item=item)
 
 
 @router.get("/diary", response_model=List[schemas.DiaryGet])
-async def get_diary_list(db: Session = Depends(get_db)):
-    return service.get_diary(db=db)
+async def get_diary_list(db: Session = Depends(get_db), user_id: User = Depends(JWTBearer())):
+    user_id = int(user_id)
+    return service.get_diary(db=db, user_id=user_id)
 
 
 @router.post("/page", response_model=schemas.PageCreate)

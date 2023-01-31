@@ -1,4 +1,4 @@
-from datetime import time
+import time
 from typing import List
 
 from fastapi import Request, HTTPException
@@ -11,7 +11,7 @@ from core.config import settings
 def decode_and_verify_jwt(token: str, secret_key: str, algorithms: List[str]) -> dict:
     try:
         decoded_token = jwt.decode(token, secret_key, algorithms=algorithms)
-        if decoded_token["exp"] >= time():
+        if decoded_token["exp"] >= time.time():
             return decoded_token
         else:
             raise HTTPException(status_code=403, detail="Expired token.")
@@ -30,7 +30,6 @@ class JWTBearer(HTTPBearer):
         if credentials:
             if not credentials.scheme == "Bearer":
                 raise HTTPException(status_code=403, detail="Authentication token invalid  scheme.")
-
             user_id = decode_and_verify_jwt(
                 credentials.credentials,
                 settings.jwt_token.secret_key,

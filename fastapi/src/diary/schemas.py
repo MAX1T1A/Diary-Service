@@ -2,9 +2,12 @@ from pydantic import BaseModel
 
 
 class DiaryBase(BaseModel):
-    name: str
-    description: str
+    diary_name: str
+    diary_description: str
     user_id: int
+
+    class Config:
+        orm_mode = True
 
 
 class DiaryCreate(DiaryBase):
@@ -20,8 +23,12 @@ class DiaryGet(DiaryBase):
 
 
 class PageBase(BaseModel):
-    name: str
-    body: str
+    page_name: str
+    note_content: str
+    diary_id: int
+
+    class Config:
+        orm_mode = True
 
 
 class PageCreate(PageBase):

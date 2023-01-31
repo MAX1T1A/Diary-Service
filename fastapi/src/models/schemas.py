@@ -3,13 +3,13 @@ from pydantic import BaseModel, constr, EmailStr, validator
 
 
 class UserSchemas(BaseModel):
-    name: str
+    user_name: str
     email: EmailStr
     password: str
 
 
 class UserInSchemas(BaseModel):
-    name: str
+    user_name: str
     email: EmailStr
     password: constr(min_length=8, max_length=20)
     password2: str

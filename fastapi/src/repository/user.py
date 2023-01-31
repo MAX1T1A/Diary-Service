@@ -8,7 +8,7 @@ from api.v1.utils.create_token import create_token
 
 def create(request: UserInSchemas, db: Session) -> User:
     new_user = User(
-        name=request.name,
+        user_name=request.user_name,
         email=request.email,
         password=Hash().bcrypt(request.password)
     )
@@ -30,5 +30,5 @@ def login(request: Login, db: Session) -> dict[str | str: any]:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Password or login was entered incorrectly")
 
-    access_token = create_token(data={"sub": user.id})
+    access_token = create_token(data={"user_id": user.id})
     return {"access_token": access_token, "token_type": "bearer"}
