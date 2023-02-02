@@ -3,44 +3,39 @@ from pydantic import BaseModel
 
 class DiaryBase(BaseModel):
     name: str
-    user_id: int
+    # user_id: int
+    # id: int
 
     class Config:
         orm_mode = True
 
 
-class DiaryCreate(DiaryBase):
-    pass
+class DiaryCreate(DiaryBase): ...
 
 
-class DiaryUpdate(DiaryBase):
-    id: int
+class DiaryUpdate(DiaryBase): ...
 
 
-class DiaryGet(DiaryBase):
-    id: int
+class DiaryGet(DiaryBase): ...
 
 
 class PageBase(BaseModel):
     name: str
     note_content: str
-    diary_id: int
+    # diary_id: int
+    # id: int
 
     class Config:
         orm_mode = True
 
 
-class PageCreate(PageBase):
-    pass
+class PageCreate(PageBase): ...
 
 
-class PageUpdate(PageBase):
-    id: int
+class PageUpdate(PageBase): ...
 
 
-class PageGet(PageBase):
-    id: int
+class PageGet(PageBase): ...
 
 
-class PageDelete(PageBase):
-    id: int
+class PageDelete(PageBase): ...

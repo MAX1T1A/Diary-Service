@@ -16,13 +16,11 @@ async def create_diary(
         item: schemas.DiaryCreate,
         db: Session = Depends(get_db),
         user_id: User = Depends(JWTBearer())):
-    item.user_id = int(user_id)
-    return service.create_diary(db=db, item=item)
+    return service.create_diary(db=db, item=item, user_id=user_id)
 
 
 @router.get("/diary", response_model=List[schemas.DiaryGet])
 async def get_diary_list(db: Session = Depends(get_db), user_id: User = Depends(JWTBearer())):
-    user_id = int(user_id)
     return service.get_diary(db=db, user_id=user_id)
 
 
