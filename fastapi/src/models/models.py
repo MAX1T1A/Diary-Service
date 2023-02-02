@@ -18,7 +18,7 @@ class Diary(Base):
     __tablename__ = 'diary'
 
     id = Column(Integer, primary_key=True)
-    name = Column(String(250), nullable=False)
+    name = Column(String(120), nullable=False)
     user_id = Column(Integer, ForeignKey(User.id), index=True)
     page_info = relationship('Page', lazy='joined', back_populates='diary_info_for_page')
     user_info = relationship('User', lazy='joined', back_populates='diary_info')

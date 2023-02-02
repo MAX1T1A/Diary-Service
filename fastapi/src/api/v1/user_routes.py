@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from models.schemas import UserInSchemas, Login
 from repository.user import create, login
 
-router = APIRouter(tags=['Auth'])
+router = APIRouter()
 
 
 @router.post("/register")
