@@ -8,7 +8,7 @@ from db.postgres import get_db
 from diary import schemas, service
 from models.models import User
 
-router = APIRouter(tags=['Diary'])
+router = APIRouter()
 
 
 @router.post("/diary", response_model=schemas.DiaryCreate)
@@ -24,6 +24,6 @@ async def get_diary_list(db: Session = Depends(get_db), user_id: User = Depends(
     return service.get_diary(db=db, user_id=user_id)
 
 
-@router.post("/page", response_model=schemas.PageCreate)
+@router.post("/diary", response_model=schemas.PageCreate)
 def create_page(item: schemas.PageCreate, db: Session = Depends(get_db)):
     return service.create_page(db=db, item=item)
