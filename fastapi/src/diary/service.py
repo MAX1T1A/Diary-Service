@@ -1,7 +1,6 @@
 from sqlalchemy.orm import Session
 
 from models.models import Diary, Page
-from .schemas import DiaryCreate, PageCreate, PageGet
 
 
 def create_items(db: Session, db_item):
