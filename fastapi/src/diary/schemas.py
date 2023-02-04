@@ -21,7 +21,7 @@ class DiaryGet(DiaryBase): ...
 
 class PageBase(BaseModel):
     name: str
-    note_content: str
+    body: str
     # diary_id: int
     # id: int
 
