@@ -44,6 +44,14 @@ class DiaryBase(BaseModel):
         orm_mode = True
 
 
+class DiaryGet(DiaryBase):
+    id: int
+
+
+class DiaryDestroy(BaseModel):
+    id: int
+
+
 class PageBase(BaseModel):
     name: str
     body: str
