@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from db.postgres import get_db
 from models.schemas import PageBase
 from models.models import Page
-from services.base import create_items
+from services.base_services import create_items
 
 router = APIRouter()
 

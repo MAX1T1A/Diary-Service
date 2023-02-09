@@ -1,27 +1,28 @@
 from typing import List
-
 from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
-
 from api.v1.utils.auth_bearer import JWTBearer
-from db.postgres import get_db
-from models.schemas import DiaryBase, DiaryGet, DiaryDestroy
+from models.schemas import DiaryBase, DiaryGet
 from models.models import User
-from services import diary_services
+from services.diary_services import DiaryServices
 
 router = APIRouter()
 
 
 @router.get("/diary", response_model=List[DiaryGet])
-async def get_diary_list(db: Session = Depends(get_db), author: User = Depends(JWTBearer())):
-    return diary_services.get(db, author)
+async def get(author: User = Depends(JWTBearer())):
+    return DiaryServices().get_diary(author)
 
 
 @router.post("/diary", response_model=DiaryBase)
-async def create_diary(request: DiaryBase, author: User = Depends(JWTBearer()), db: Session = Depends(get_db)):
-    return diary_services.create(request, author, db)
+async def create(request: DiaryBase, author: User = Depends(JWTBearer())):
+    return await DiaryServices().create_diary(request, author)
 
 
-@router.delete("/{diaryId}", response_model=int)
-async def destroy_diary(request: DiaryDestroy, author: User = Depends(JWTBearer()), db: Session = Depends(get_db)):
-    return diary_services.destroy(request, author, db)
+@router.delete("/{diary_id}", response_model=int)
+async def delete(diary_id: int, author: User = Depends(JWTBearer())):
+    return DiaryServices().delete_diary(id=diary_id, user_id=author)
+
+
+@router.put("/{diary_id}", response_model=int)
+async def update(diary_id: int, request: DiaryBase, author: User = Depends(JWTBearer())):
+    return DiaryServices().update_diary(request, id=diary_id, user_id=author)
