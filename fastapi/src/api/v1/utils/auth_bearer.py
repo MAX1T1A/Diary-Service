@@ -3,7 +3,7 @@ from typing import List
 
 from fastapi import Request, HTTPException
 from fastapi.security import HTTPBearer
-from jose import jwt
+import jwt
 
 from core.config import settings
 

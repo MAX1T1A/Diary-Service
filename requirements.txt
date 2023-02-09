@@ -19,3 +19,4 @@ starlette==0.23.1
 typing_extensions==4.4.0
 uvicorn==0.20.0
 jose~=1.0.0
+PyJWT~=2.6.0
