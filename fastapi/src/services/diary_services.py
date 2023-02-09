@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from fastapi import status, HTTPException
+from fastapi import status
 from models.models import Diary
 from models.schemas import DiaryBase, DiaryGet, DiaryDestroy
 
@@ -21,8 +21,6 @@ def create(request: DiaryBase, author: int, db: Session) -> Diary:
 
 def destroy(request: DiaryDestroy, author: int, db: Session) -> int:
     diary = db.query(Diary).filter(Diary.id == request.id, Diary.user_id == author).first()
-    if not diary:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="This diary doesn't exist")
     db.delete(diary)
     db.commit()
     return status.HTTP_200_OK
