@@ -33,3 +33,22 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     id: int
+
+
+class DiaryBase(BaseModel):
+    name: str
+    # user_id: int
+    # id: int
+
+    class Config:
+        orm_mode = True
+
+
+class PageBase(BaseModel):
+    name: str
+    body: str
+    # diary_id: int
+    # id: int
+
+    class Config:
+        orm_mode = True
