@@ -54,9 +54,19 @@ class DiaryDestroy(BaseModel):
 
 class PageBase(BaseModel):
     name: str
-    body: str
-    # diary_id: int
-    # id: int
 
     class Config:
         orm_mode = True
+
+
+class PageGet(PageBase):
+    id: int
+
+
+class PageCreate(PageBase):
+    body: str
+
+
+class PageDestroy(BaseModel):
+    id: int
+    diary_id: int

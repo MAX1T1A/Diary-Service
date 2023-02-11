@@ -17,13 +17,14 @@ class BaseService:
         self._session.refresh(instance)
         return instance
 
-    def update_name(self, instance, request):
-        instance.name = request.name
-        return self._session.commit()
-
-    def update_body(self, instance, request):
-        instance.body = request.body
-        return self._session.commit()
+    def update(self, instance: _model, request, argument: int):
+        if argument == 1:
+            instance.name = request.name
+            return self._session.commit()
+        elif argument == 2:
+            instance.name = request.name
+            instance.body = request.body
+            return self._session.commit()
 
     def delete(self, instance):
         self._session.delete(instance)

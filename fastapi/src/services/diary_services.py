@@ -17,7 +17,7 @@ class DiaryServices(BaseService):
         diary = self._session.query(self._model).filter_by(**kwargs).first()
         if not diary:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="This diary doesn't exist")
-        self.update_name(diary, request)
+        self.update(diary, request, 1)
         return status.HTTP_200_OK
 
     def delete_diary(self, **kwargs) -> int:

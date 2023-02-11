@@ -1,19 +1,28 @@
+from typing import List
 from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
-
-from db.postgres import get_db
-from models.schemas import PageBase
+from api.v1.utils.auth_bearer import JWTBearer
+from models.schemas import PageBase, PageGet, PageCreate
 from models.models import Page
-from services.base_services import create_items
+from services.page_services import PageServices
 
 router = APIRouter()
 
 
-@router.post("/page", response_model=PageBase)
-async def create_page(item: PageBase, db: Session = Depends(get_db)):
-    db_item = Page(**item.dict())
-    return create_items(db=db, db_item=db_item)
+@router.post("/diary/{diary_id}/page", response_model=PageCreate)
+async def create(diary_id: int, request: PageCreate):
+    return PageServices().create_page(request, diary_id)
 
-# @router.get("/page", response_model=List[schemas.PageGet])
-# def get_page(diary_id: Page, db: Session = Depends(get_db)):
-#     return service.get_page(db=db, diary_id=diary_id)
+
+@router.get("/diary/{diary_id}/page", response_model=List[PageGet])
+def get_page(diary_id: int):
+    return PageServices().get_page(diary_id=diary_id)
+
+
+@router.put("/diary/{diary_id}/page/{page_id}", response_model=int)
+def update_page(request: PageCreate, diary_id: int, page_id: int):
+    return PageServices().update_page(request, id=page_id, diary_id=diary_id)
+
+
+@router.delete("/diary/{diary_id}/page/{page_id}", response_model=int)
+def delete(diary_id: int, page_id: int):
+    return PageServices().delete_page(id=page_id, diary_id=diary_id)
