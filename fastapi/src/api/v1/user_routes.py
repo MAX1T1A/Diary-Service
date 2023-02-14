@@ -11,7 +11,7 @@ router = APIRouter()
 
 
 @router.post("/register")
-def create(request: UserInSchemas, user_service: UserServices = Depends(get_user_service), hasher: Hash = Depends(get_hasher)):
+def create(request: UserInSchemas, user_service: UserServices = Depends(get_user_service), hasher: Hash = Depends(get_hasher)) -> int:
     for c in user_service.session.query(user_service.model):
         if c.email == request.email:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="This user is already registered.")
