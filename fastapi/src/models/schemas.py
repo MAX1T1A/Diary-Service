@@ -35,20 +35,18 @@ class TokenData(BaseModel):
     id: int
 
 
-class DiaryBase(BaseModel):
+class DiaryUniversal(BaseModel):
     name: str
-    # user_id: int
-    # id: int
-
-    class Config:
-        orm_mode = True
 
 
-class PageBase(BaseModel):
+class DiaryGet(DiaryUniversal):
+    id: int
+
+
+class PageUniversal(BaseModel):
     name: str
     body: str
-    # diary_id: int
-    # id: int
 
-    class Config:
-        orm_mode = True
+
+class PageGet(PageUniversal):
+    id: int

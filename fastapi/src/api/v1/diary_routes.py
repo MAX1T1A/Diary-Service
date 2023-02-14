@@ -1,23 +1,37 @@
 from typing import List
-
-from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
-
+from fastapi import APIRouter, Depends, HTTPException, status
 from api.v1.utils.auth_bearer import JWTBearer
-from db.postgres import get_db
-from models.schemas import DiaryBase
-from models.models import Diary, User
-from services import base, diary
+from models.schemas import DiaryGet, DiaryUniversal
+from models.models import User
+from services.diary_services import DiaryServices, get_diary_service
 
 router = APIRouter()
 
 
-@router.post("/diary", response_model=DiaryBase)
-async def create_diary(item: DiaryBase, db: Session = Depends(get_db), user_id: User = Depends(JWTBearer())):
-    db_item = Diary(**item.dict(), user_id=user_id)
-    return base.create_items(db=db, db_item=db_item)
+@router.get(path="/diary")
+def get_list_diaries(author: User = Depends(JWTBearer()), diary_service: DiaryServices = Depends(get_diary_service)) -> List[DiaryGet]:
+    return [DiaryGet(id=diary.id, name=diary.name) for diary in diary_service.find_many(user_id=author)]
 
 
-@router.get("/diary", response_model=List[DiaryBase])
-async def get_diary_list(db: Session = Depends(get_db), user_id: User = Depends(JWTBearer())):
-    return diary.get_diary(db=db, user_id=user_id)
+@router.post(path="/diary")
+def add_diary(request: DiaryUniversal, author: User = Depends(JWTBearer()), diary_service: DiaryServices = Depends(get_diary_service)) -> int:
+    diary_service.create(name=request.name, user_id=author)
+    return status.HTTP_201_CREATED
+
+
+@router.put(path="/diary/{diary_id}")
+def update_diary(diary_id: int, request: DiaryUniversal, author: User = Depends(JWTBearer()), diary_service: DiaryServices = Depends(get_diary_service)) -> int:
+    diary = diary_service.find_one(id=diary_id, user_id=author)
+    if not diary:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="This diary doesn't exist.")
+    diary_service.update(request, diary)
+    return status.HTTP_204_NO_CONTENT
+
+
+@router.delete(path="/diary/{diary_id}")
+def delete_diary(diary_id: int, author: User = Depends(JWTBearer()), diary_service: DiaryServices = Depends(get_diary_service)) -> int:
+    diary = diary_service.find_one(id=diary_id, user_id=author)
+    if not diary:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="This diary doesn't exist.")
+    diary_service.delete(diary)
+    return status.HTTP_204_NO_CONTENT
