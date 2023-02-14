@@ -1,28 +1,67 @@
 from typing import List
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status, HTTPException
 from api.v1.utils.auth_bearer import JWTBearer
-from models.schemas import PageBase, PageGet, PageCreate
-from models.models import Page
-from services.page_services import PageServices
+from models.models import User
+from models.schemas import PageGet, PageUniversal
+from services.page_services import get_page_service, PageServices
+from services.diary_services import DiaryServices, get_diary_service
 
 router = APIRouter()
 
 
-@router.post("/diary/{diary_id}/page", response_model=PageCreate)
-async def create(diary_id: int, request: PageCreate):
-    return PageServices().create_page(request, diary_id)
+@router.get("/diary/{diary_id}/page")
+def getting_list_pages(
+        diary_id: int,
+        page_service: PageServices = Depends(get_page_service),
+        author: User = Depends(JWTBearer()),
+        diary_service: DiaryServices = Depends(get_diary_service)) -> List[PageGet]:
+    diary = diary_service.session.query(diary_service.model).filter_by(id=diary_id, user_id=author).first()
+    if not diary:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="This diary doesn't exist.")
+    return [PageGet(id=page.id, name=page.name, body=page.body) for page in page_service.get_many(diary_id=diary_id)]
 
 
-@router.get("/diary/{diary_id}/page", response_model=List[PageGet])
-def get_page(diary_id: int):
-    return PageServices().get_page(diary_id=diary_id)
+@router.post("/diary/{diary_id}/page")
+async def adding_page_database(diary_id: int,
+                               request: PageUniversal,
+                               page_service: PageServices = Depends(get_page_service),
+                               author: User = Depends(JWTBearer()),
+                               diary_service: DiaryServices = Depends(get_diary_service)) -> int:
+    diary = diary_service.session.query(diary_service.model).filter_by(id=diary_id, user_id=author).first()
+    if not diary:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="This diary doesn't exist.")
+    page_service.create(name=request.name, body=request.body, diary_id=diary_id)
+    return status.HTTP_201_CREATED
 
 
-@router.put("/diary/{diary_id}/page/{page_id}", response_model=int)
-def update_page(request: PageCreate, diary_id: int, page_id: int):
-    return PageServices().update_page(request, id=page_id, diary_id=diary_id)
+@router.put("/diary/{diary_id}/page/{page_id}")
+def update_page_database(diary_id: int,
+                         page_id: int,
+                         request: PageUniversal,
+                         page_service: PageServices = Depends(get_page_service),
+                         author: User = Depends(JWTBearer()),
+                         diary_service: DiaryServices = Depends(get_diary_service)) -> int:
+    diary = diary_service.session.query(diary_service.model).filter_by(id=diary_id, user_id=author).first()
+    if not diary:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="This diary doesn't exist.")
+    page = page_service.session.query(page_service.model).filter_by(id=page_id, diary_id=diary_id).first()
+    if not page:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="This page doesn't exist.")
+    page_service.update(request, page)
+    return status.HTTP_204_NO_CONTENT
 
 
-@router.delete("/diary/{diary_id}/page/{page_id}", response_model=int)
-def delete(diary_id: int, page_id: int):
-    return PageServices().delete_page(id=page_id, diary_id=diary_id)
+@router.delete("/diary/{diary_id}/page/{page_id}")
+def deleting_page_database(diary_id: int,
+                           page_id: int,
+                           page_service: PageServices = Depends(get_page_service),
+                           author: User = Depends(JWTBearer()),
+                           diary_service: DiaryServices = Depends(get_diary_service)) -> int:
+    diary = diary_service.session.query(diary_service.model).filter_by(id=diary_id, user_id=author).first()
+    if not diary:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="This diary doesn't exist.")
+    page = page_service.session.query(page_service.model).filter_by(id=page_id, diary_id=diary_id).first()
+    if not page:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="This page doesn't exist.")
+    page_service.delete(page)
+    return status.HTTP_204_NO_CONTENT
