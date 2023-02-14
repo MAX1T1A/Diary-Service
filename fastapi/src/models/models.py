@@ -23,6 +23,12 @@ class Diary(Base):
     page_info = relationship('Page', lazy='joined', back_populates='diary_info_for_page')
     user_info = relationship('User', lazy='joined', back_populates='diary_info')
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name
+        }
+
 
 class Page(Base):
     __tablename__ = 'page'
@@ -32,3 +38,10 @@ class Page(Base):
     body = Column(Text)
     diary_id = Column(Integer, ForeignKey(Diary.id), index=True)
     diary_info_for_page = relationship('Diary', lazy='joined', back_populates='page_info')
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "body": self.body
+        }

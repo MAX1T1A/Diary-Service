@@ -10,7 +10,7 @@ router = APIRouter()
 
 @router.get(path="/diary")
 def get_list_diaries(author: User = Depends(JWTBearer()), diary_service: DiaryServices = Depends(get_diary_service)) -> List[DiaryGet]:
-    return [DiaryGet(id=diary.id, name=diary.name) for diary in diary_service.find_many(user_id=author)]
+    return [DiaryGet(**diary.to_dict()) for diary in diary_service.find_many(user_id=author)]
 
 
 @router.post(path="/diary")
