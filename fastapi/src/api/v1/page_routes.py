@@ -19,7 +19,7 @@ def get_list_pages(
     diary = diary_service.find_one(id=diary_id, user_id=author)
     if not diary:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="This diary doesn't exist.")
-    return [PageGet(id=page.id, name=page.name, body=page.body) for page in page_service.find_many(diary_id=diary_id)]
+    return [PageGet(**page.to_dict()) for page in page_service.find_many(diary_id=diary_id)]
 
 
 @router.post("/diary/{diary_id}/page")
