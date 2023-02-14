@@ -9,19 +9,19 @@ router = APIRouter()
 
 
 @router.get(path="/diary")
-async def getting_list_diaries(author: User = Depends(JWTBearer()), diary_service: DiaryServices = Depends(get_diary_service)) -> List[DiaryGet]:
-    return [DiaryGet(id=diary.id, name=diary.name) for diary in diary_service.get_many(user_id=author)]
+def get_list_diaries(author: User = Depends(JWTBearer()), diary_service: DiaryServices = Depends(get_diary_service)) -> List[DiaryGet]:
+    return [DiaryGet(id=diary.id, name=diary.name) for diary in diary_service.find_many(user_id=author)]
 
 
 @router.post(path="/diary")
-async def adding_diary_database(request: DiaryUniversal, author: User = Depends(JWTBearer()), diary_service: DiaryServices = Depends(get_diary_service)) -> int:
+def add_diary(request: DiaryUniversal, author: User = Depends(JWTBearer()), diary_service: DiaryServices = Depends(get_diary_service)) -> int:
     diary_service.create(name=request.name, user_id=author)
     return status.HTTP_201_CREATED
 
 
 @router.put(path="/diary/{diary_id}")
-async def update_diary_database(diary_id: int, request: DiaryUniversal, author: User = Depends(JWTBearer()), diary_service: DiaryServices = Depends(get_diary_service)) -> int:
-    diary = diary_service.session.query(diary_service.model).filter_by(id=diary_id, user_id=author).first()
+def update_diary(diary_id: int, request: DiaryUniversal, author: User = Depends(JWTBearer()), diary_service: DiaryServices = Depends(get_diary_service)) -> int:
+    diary = diary_service.find_one(id=diary_id, user_id=author)
     if not diary:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="This diary doesn't exist.")
     diary_service.update(request, diary)
@@ -29,8 +29,8 @@ async def update_diary_database(diary_id: int, request: DiaryUniversal, author: 
 
 
 @router.delete(path="/diary/{diary_id}")
-async def deleting_diary_database(diary_id: int, author: User = Depends(JWTBearer()), diary_service: DiaryServices = Depends(get_diary_service)) -> int:
-    diary = diary_service.session.query(diary_service.model).filter_by(id=diary_id, user_id=author).first()
+def delete_diary(diary_id: int, author: User = Depends(JWTBearer()), diary_service: DiaryServices = Depends(get_diary_service)) -> int:
+    diary = diary_service.find_one(id=diary_id, user_id=author)
     if not diary:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="This diary doesn't exist.")
     diary_service.delete(diary)

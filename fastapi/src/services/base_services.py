@@ -11,15 +11,17 @@ class BaseService:
     def __init__(self):
         self._session = Session()
 
-    def get_many(self, **kwargs) -> List[_model]:
+    def find_many(self, **kwargs) -> List[_model]:
         return self._session.query(self._model).filter_by(**kwargs).all()
 
-    def create(self, **kwargs) -> _model:
+    def find_one(self, **kwargs) -> _model:
+        return self._session.query(self._model).filter_by(**kwargs).first()
+
+    def create(self, **kwargs) -> None:
         instance = self._model(**kwargs)
         self._session.add(instance)
         self._session.commit()
-        self._session.refresh(instance)
-        return instance
+        return self._session.refresh(instance)
 
     def update(self, request, instance) -> None:
         for key, value in request.__dict__.items():
