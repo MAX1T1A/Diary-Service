@@ -14,7 +14,7 @@ class DiaryServices(BaseService):
 diary_service: DiaryServices = DiaryServices()
 
 
-def get_diary_service() -> DiaryServices:
+async def get_diary_service() -> DiaryServices:
     return diary_service
 
 

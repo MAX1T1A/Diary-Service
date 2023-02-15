@@ -1,7 +1,4 @@
 from typing import List
-
-from sqlalchemy import select, update
-
 from db.postgres import Session
 
 

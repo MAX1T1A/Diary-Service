@@ -10,7 +10,7 @@ router = APIRouter()
 
 
 @router.get("/diary/{diary_id}/page")
-def get_list_pages(
+async def get_list_pages(
         diary_id: int,
         page_service: PageServices = Depends(get_page_service),
         author: User = Depends(JWTBearer()),
@@ -23,7 +23,7 @@ def get_list_pages(
 
 
 @router.post("/diary/{diary_id}/page")
-def add_page(
+async def add_page(
         diary_id: int,
         request: PageUniversal,
         page_service: PageServices = Depends(get_page_service),
@@ -38,7 +38,7 @@ def add_page(
 
 
 @router.put("/diary/{diary_id}/page/{page_id}")
-def update_page(
+async def update_page(
         diary_id: int,
         page_id: int,
         request: PageUniversal,
@@ -57,7 +57,7 @@ def update_page(
 
 
 @router.delete("/diary/{diary_id}/page/{page_id}")
-def delete_page(
+async def delete_page(
         diary_id: int,
         page_id: int,
         page_service: PageServices = Depends(get_page_service),

@@ -1,16 +1,14 @@
 import time
 from typing import List
-
 from fastapi import Request, HTTPException
 from fastapi.security import HTTPBearer
 import jwt
-
 from core.config import settings
 
 
-def decode_and_verify_jwt(token: str, secret_key: str, algorithms: List[str]) -> dict:
+async def decode_and_verify_jwt(token: str, secret_key: str, algorithms: List[str]) -> dict:
     try:
-        decoded_token = jwt.decode(token, secret_key, algorithms=algorithms)
+        decoded_token = await jwt.decode(token, secret_key, algorithms=algorithms)
         if decoded_token["exp"] >= time.time():
             return decoded_token
         else:
@@ -34,6 +32,6 @@ class JWTBearer(HTTPBearer):
                 credentials.credentials,
                 settings.jwt_token.secret_key,
                 [settings.jwt_token.algorithm],
-            )["user_id"]
+            ).__getattribute__("user_id")
 
             return user_id
