@@ -2,15 +2,13 @@ import os.path
 import sys
 from logging.config import fileConfig
 
+from alembic import context
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
-from alembic import context
-
 from db.postgres import Base, db_uri, init_db
 
-
-sys.path.append(os.path.join(os.getcwd(), ".."))
+sys.path.append(os.path.join(os.getcwd(), "../src"))
 init_db()
 
 

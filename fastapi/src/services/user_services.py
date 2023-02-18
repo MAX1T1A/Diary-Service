@@ -1,5 +1,5 @@
-from models.models import User
 from core.hashing import Hash
+from models.models import User
 from services.base_services import BaseService
 
 

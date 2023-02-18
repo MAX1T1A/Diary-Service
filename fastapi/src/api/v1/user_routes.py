@@ -1,5 +1,7 @@
 from typing import Dict
+
 from fastapi import APIRouter, Depends, HTTPException, status
+
 from api.v1.utils.create_token import create_token
 from core.hashing import Hash
 from models.schemas import UserInSchemas, Login

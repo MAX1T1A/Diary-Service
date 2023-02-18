@@ -1,10 +1,12 @@
 from typing import List
+
 from fastapi import APIRouter, Depends, status, HTTPException
+
 from api.v1.utils.auth_bearer import JWTBearer
 from models.models import User
 from models.schemas import PageGet, PageUniversal
-from services.page_services import get_page_service, PageServices
 from services.diary_services import DiaryServices, get_diary_service
+from services.page_services import get_page_service, PageServices
 
 router = APIRouter()
 

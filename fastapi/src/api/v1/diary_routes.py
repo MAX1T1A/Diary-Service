@@ -1,8 +1,10 @@
 from typing import List
+
 from fastapi import APIRouter, Depends, HTTPException, status
+
 from api.v1.utils.auth_bearer import JWTBearer
-from models.schemas import DiaryGet, DiaryUniversal
 from models.models import User
+from models.schemas import DiaryGet, DiaryUniversal
 from services.diary_services import DiaryServices, get_diary_service
 
 router = APIRouter()

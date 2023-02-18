@@ -28,7 +28,7 @@ class Settings(BaseSettings):
         #  Для локальной разработки вне docker
         env_file = (
             os.path.join(ENV_DIR, ".env.prod"),
-            os.path.join(ENV_DIR, ".env.dev"),
+            os.path.join(ENV_DIR, ".env.prod.dev"),
         )
         env_nested_delimiter = "__"
 
