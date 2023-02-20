@@ -13,5 +13,5 @@ class PageServices(BaseService):
 page_service: PageServices = PageServices()
 
 
-async def get_page_service() -> PageServices:
+def get_page_service() -> PageServices:
     return page_service

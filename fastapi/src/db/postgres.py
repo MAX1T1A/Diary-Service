@@ -19,7 +19,7 @@ Base.query = db_session.query_property()
 
 
 def init_db():
-    pass
+    from models.models import User, Diary, Page
 
 
 def get_db():

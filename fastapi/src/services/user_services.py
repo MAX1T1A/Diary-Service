@@ -15,9 +15,9 @@ user_service: UserServices = UserServices()
 hasher: Hash = Hash()
 
 
-async def get_user_service() -> UserServices:
+def get_user_service() -> UserServices:
     return user_service
 
 
-async def get_hasher() -> Hash:
+def get_hasher() -> Hash:
     return hasher

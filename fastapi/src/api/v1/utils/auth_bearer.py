@@ -8,9 +8,9 @@ from fastapi.security import HTTPBearer
 from core.config import settings
 
 
-async def decode_and_verify_jwt(token: str, secret_key: str, algorithms: List[str]) -> dict:
+def decode_and_verify_jwt(token: str, secret_key: str, algorithms: List[str]) -> dict:
     try:
-        decoded_token = await jwt.decode(token, secret_key, algorithms=algorithms)
+        decoded_token = jwt.decode(token, secret_key, algorithms=algorithms)
         if decoded_token["exp"] >= time.time():
             return decoded_token
         else:
@@ -34,6 +34,6 @@ class JWTBearer(HTTPBearer):
                 credentials.credentials,
                 settings.jwt_token.secret_key,
                 [settings.jwt_token.algorithm],
-            ).__getattribute__("user_id")
+            )["user_id"]
 
             return user_id
