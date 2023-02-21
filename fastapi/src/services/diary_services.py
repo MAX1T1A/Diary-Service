@@ -1,4 +1,3 @@
-from typing import Dict
 from models.models import Diary
 from services.base_services import BaseService
 

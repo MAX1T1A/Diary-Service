@@ -1,9 +1,9 @@
 import time
 from typing import List
 
+import jwt
 from fastapi import Request, HTTPException
 from fastapi.security import HTTPBearer
-import jwt
 
 from core.config import settings
 

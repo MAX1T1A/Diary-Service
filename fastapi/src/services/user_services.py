@@ -1,9 +1,5 @@
-from typing import Dict
-from fastapi import HTTPException, status
-from models.models import User
-from models.schemas import Login
 from core.hashing import Hash
-from api.v1.utils.create_token import create_token
+from models.models import User
 from services.base_services import BaseService
 
 
