@@ -1,7 +1,5 @@
 from typing import Dict
-
 from fastapi import APIRouter, Depends, HTTPException, status
-
 from api.v1.utils.create_token import create_token
 from core.hashing import Hash
 from models.schemas import UserInSchemas, Login
@@ -11,7 +9,7 @@ router = APIRouter()
 
 
 @router.post("/register")
-async def create(request: UserInSchemas, user_service: UserServices = Depends(get_user_service), hasher: Hash = Depends(get_hasher)) -> int:
+def user_register(request: UserInSchemas, user_service: UserServices = Depends(get_user_service), hasher: Hash = Depends(get_hasher)) -> int:
     user = user_service.find_one(email=request.email)
     if user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="This user is already registered.")
@@ -20,7 +18,7 @@ async def create(request: UserInSchemas, user_service: UserServices = Depends(ge
 
 
 @router.post("/login")
-async def login(request: Login, user_service: UserServices = Depends(get_user_service), hasher: Hash = Depends(get_hasher)) -> Dict[str, str]:
+def login(request: Login, user_service: UserServices = Depends(get_user_service), hasher: Hash = Depends(get_hasher)) -> Dict[str, str]:
     user = user_service.find_one(email=request.email)
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="This user is not registered.")

@@ -10,8 +10,8 @@ db_uri = (
     f"{settings.postgres.host}:{settings.postgres.port}/"
     f"{settings.postgres.dbname}"
 )
-db = create_engine(db_uri, pool_size=20, max_overflow=0)
-Session = sessionmaker(bind=db, autocommit=False, autoflush=False)
+engine = create_engine(db_uri, pool_size=20, max_overflow=0)
+Session = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 db_session = scoped_session(Session)
 
 Base = declarative_base()

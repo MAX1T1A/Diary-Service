@@ -1,4 +1,3 @@
-import uvicorn
 from fastapi import FastAPI
 from api.v1 import user_routes, diary_routes, page_routes
 

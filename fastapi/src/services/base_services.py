@@ -1,6 +1,6 @@
 from typing import List
 
-from db.postgres import Session
+from database.postgres import Session
 
 
 class BaseService:

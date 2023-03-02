@@ -10,18 +10,18 @@ from services.diary_services import DiaryServices, get_diary_service
 router = APIRouter()
 
 
-@router.get(path="/diary")
-async def get_list_diaries(author: User = Depends(JWTBearer()), diary_service: DiaryServices = Depends(get_diary_service)) -> List[DiaryGet]:
+@router.get("/diary")
+def get_list_diaries(author: User = Depends(JWTBearer()), diary_service: DiaryServices = Depends(get_diary_service)) -> List[DiaryGet]:
     return [DiaryGet(**diary.to_dict()) for diary in diary_service.find_many(user_id=author)]
 
 
-@router.post(path="/diary")
-async def add_diary(request: DiaryUniversal, author: User = Depends(JWTBearer()), diary_service: DiaryServices = Depends(get_diary_service)) -> int:
+@router.post("/diary")
+def add_diary(request: DiaryUniversal, author: User = Depends(JWTBearer()), diary_service: DiaryServices = Depends(get_diary_service)) -> int:
     diary_service.create(name=request.name, user_id=author)
     return status.HTTP_201_CREATED
 
 
-@router.put(path="/diary/{diary_id}")
+@router.put("/diary/{diary_id}")
 def update_diary(diary_id: int, request: DiaryUniversal, author: User = Depends(JWTBearer()), diary_service: DiaryServices = Depends(get_diary_service)) -> int:
     diary = diary_service.find_one(id=diary_id, user_id=author)
     if not diary:
@@ -30,8 +30,8 @@ def update_diary(diary_id: int, request: DiaryUniversal, author: User = Depends(
     return status.HTTP_204_NO_CONTENT
 
 
-@router.delete(path="/diary/{diary_id}")
-async def delete_diary(diary_id: int, author: User = Depends(JWTBearer()), diary_service: DiaryServices = Depends(get_diary_service)) -> int:
+@router.delete("/diary/{diary_id}")
+def delete_diary(diary_id: int, author: User = Depends(JWTBearer()), diary_service: DiaryServices = Depends(get_diary_service)) -> int:
     diary = diary_service.find_one(id=diary_id, user_id=author)
     if not diary:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="This diary doesn't exist.")

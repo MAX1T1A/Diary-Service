@@ -1,5 +1,4 @@
 import os
-
 from pydantic import BaseSettings
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,7 +19,13 @@ class PostgresSettings(BaseSettings):
     password: str
 
 
+class TestPostgresSettings(BaseSettings):
+    dbname: str
+    host: str
+
+
 class Settings(BaseSettings):
+    test_postgres: TestPostgresSettings
     postgres: PostgresSettings
     jwt_token: JWTSettings
 

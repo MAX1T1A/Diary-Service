@@ -7,7 +7,7 @@ from sqlalchemy import pool
 
 from alembic import context
 
-from db.postgres import Base, db_uri, init_db
+from database.postgres import Base, db_uri, init_db
 
 
 sys.path.append(os.path.join(os.getcwd(), ".."))
