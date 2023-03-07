@@ -29,7 +29,3 @@ class BaseService:
     def delete(self, instance: _model) -> None:
         self._session.delete(instance)
         return self._session.commit()
-
-    @property
-    def session(self) -> Session:
-        return self._session

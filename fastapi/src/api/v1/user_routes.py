@@ -1,9 +1,9 @@
 from typing import Dict
 from fastapi import APIRouter, Depends, HTTPException, status
 from api.v1.utils.create_token import create_token
-from core.hashing import Hash
+from core.hashing import Hash, get_hasher
 from models.schemas import UserInSchemas, Login
-from services.user_services import UserServices, get_user_service, get_hasher
+from services.user_services import UserServices, get_user_service
 
 router = APIRouter()
 

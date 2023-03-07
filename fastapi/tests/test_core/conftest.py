@@ -1,47 +1,61 @@
-from fastapi.testclient import TestClient
-from testcontainers.core.utils import is_windows
-from database.postgres import Base, get_db
-from database.postgres import sessionmaker
-from sqlalchemy import create_engine
-from testcontainers.postgres import PostgresContainer
-from core.config import settings
-from testcontainers.core.waiting_utils import wait_for_logs
 import pytest
+from testcontainers.core.waiting_utils import wait_for_logs
+from testcontainers.core import utils
+from database.postgres import db_session
+from fastapi.testclient import TestClient
+from database.postgres import Base, init_db
+from database.postgres import sessionmaker
+from sqlalchemy import create_engine, text
+from sqlalchemy.orm import Session
+from testcontainers.postgres import PostgresContainer
 from main import app
+
+
+POSTGRES_IMAGE = "postgres:15"
+POSTGRES_USER = "postgres"
+POSTGRES_PASSWORD = "test_password"
+POSTGRES_DATABASE = "test_database"
+POSTGRES_CONTAINER_PORT = 5432
 
 
 class BaseTestSettings:
     @pytest.fixture(scope="session")
     def postgres_container(self) -> PostgresContainer:
         postgres = PostgresContainer(
-            user=settings.postgres.user,
-            password=settings.postgres.password,
-            dbname=settings.test_postgres.dbname,
-            port=settings.postgres.port,
-            image="postgres:15"
+            image=POSTGRES_IMAGE,
+            user=POSTGRES_USER,
+            password=POSTGRES_PASSWORD,
+            dbname=POSTGRES_DATABASE,
+            port=POSTGRES_CONTAINER_PORT,
         )
         with postgres:
             wait_for_logs(
                 postgres,
-                r"UTC \[1\] LOG:  database system is ready to accept connections", 10)
+                r"UTC \[1\] LOG:  database system is ready to accept connections",
+                10,
+            )
             yield postgres
 
+    # @pytest.fixture(autouse=True)
+    # def truncate_tables(self, db_session: Session):
+    #     with db_session as connection:
+    #         for table in Base.metadata.tables:
+    #             stm = text(f'TRUNCATE TABLE "{table}" RESTART IDENTITY CASCADE')
+    #             connection.execute(statement=stm)
+
     @pytest.fixture(scope="session")
-    def db(self, postgres_container: PostgresContainer) -> sessionmaker:
-        if is_windows():
-            postgres_container.get_container_host_ip = lambda: settings.test_postgres.host
+    def db(self, postgres_container: PostgresContainer):
+        if utils.is_windows():
+            postgres_container.get_container_host_ip = lambda: "localhost"
         url = postgres_container.get_connection_url()
-        engine = create_engine(url, pool_size=20, max_overflow=0)
+        engine = create_engine(url, echo=False, future=True)
         Base.metadata.create_all(engine)
-        Session = sessionmaker(bind=engine)
-        with Session() as session:
+        with Session(engine) as session:
             yield session
 
     @pytest.fixture(scope="session")
-    def test_client(self, db) -> TestClient:
-        app.dependency_overrides[get_db] = lambda: db
-        client: TestClient = TestClient(app)
-        try:
-            yield client
-        finally:
-            app.dependency_overrides.clear()
+    def test_client(self, db):
+        app.dependency_overrides[db_session] = lambda: db
+        with TestClient(app) as c:
+            yield c
+        app.dependency_overrides.clear()

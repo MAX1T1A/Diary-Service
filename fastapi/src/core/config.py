@@ -19,13 +19,7 @@ class PostgresSettings(BaseSettings):
     password: str
 
 
-class TestPostgresSettings(BaseSettings):
-    dbname: str
-    host: str
-
-
 class Settings(BaseSettings):
-    test_postgres: TestPostgresSettings
     postgres: PostgresSettings
     jwt_token: JWTSettings
 
