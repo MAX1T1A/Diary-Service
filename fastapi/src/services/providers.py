@@ -1,12 +1,12 @@
-from services.user_services import UserServices, user_service
+from services.user_services import UserServices
 
 
-def provider_diary():
+def stub_user_service():
     raise NotImplementedError
 
 
-def get_user_service() -> UserServices:
-    return UserServices()
+def get_user_service(session) -> UserServices:
+    return UserServices(session)
 
 
 

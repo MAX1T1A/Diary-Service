@@ -6,8 +6,8 @@ from database.postgres import Session
 class BaseService:
     _model = None
 
-    def __init__(self):
-        self._session = Session()
+    def __init__(self, session):
+        self._session = session
 
     def find_many(self, **kwargs) -> List[_model]:
         return self._session.query(self._model).filter_by(**kwargs).all()

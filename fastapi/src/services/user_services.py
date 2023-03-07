@@ -7,4 +7,3 @@ class UserServices(BaseService):
     _model = User
 
 
-user_service: UserServices = UserServices()

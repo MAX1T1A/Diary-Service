@@ -3,13 +3,14 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from api.v1.utils.create_token import create_token
 from core.hashing import Hash, get_hasher
 from models.schemas import UserInSchemas, Login
-from services.user_services import UserServices, get_user_service
+from services.user_services import UserServices
+from services.providers import stub_user_service
 
 router = APIRouter()
 
 
 @router.post("/register")
-def user_register(request: UserInSchemas, user_service: UserServices = Depends(get_user_service), hasher: Hash = Depends(get_hasher)) -> int:
+def user_register(request: UserInSchemas, user_service: UserServices = Depends(stub_user_service), hasher: Hash = Depends(get_hasher)) -> int:
     user = user_service.find_one(email=request.email)
     if user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="This user is already registered.")
@@ -18,7 +19,7 @@ def user_register(request: UserInSchemas, user_service: UserServices = Depends(g
 
 
 @router.post("/login")
-def login(request: Login, user_service: UserServices = Depends(get_user_service), hasher: Hash = Depends(get_hasher)) -> Dict[str, str]:
+def login(request: Login, user_service: UserServices = Depends(stub_user_service), hasher: Hash = Depends(get_hasher)) -> Dict[str, str]:
     user = user_service.find_one(email=request.email)
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="This user is not registered.")
