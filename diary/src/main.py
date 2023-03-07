@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from api.v1 import user_routes, diary_routes, page_routes
+from api.v1 import user_routes
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.orm import Session

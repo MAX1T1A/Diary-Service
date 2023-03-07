@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from testcontainers.postgres import PostgresContainer
 from main import build_app
 from fastapi.testclient import TestClient
+import httpx
 
 
 POSTGRES_IMAGE = "postgres:15"
@@ -31,12 +32,13 @@ def postgres_container() -> PostgresContainer:
             r"UTC \[1\] LOG:  database system is ready to accept connections",
             10,
         )
+
         yield postgres
 
 
 @pytest.fixture(autouse=True)
-def truncate_tables(db_session: Session):
-    with db_session as connection:
+def truncate_tables(provide_engine_singleton: Session):
+    with provide_engine_singleton as connection:
         for table in Base.metadata.tables:
             stm = text(f'TRUNCATE TABLE "{table}" RESTART IDENTITY CASCADE')
             connection.execute(statement=stm)
