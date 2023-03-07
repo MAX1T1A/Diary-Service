@@ -1,10 +1,8 @@
 import pytest
 from testcontainers.core.waiting_utils import wait_for_logs
 from testcontainers.core import utils
-from database.postgres import db_session
 from fastapi.testclient import TestClient
-from database.postgres import Base, init_db
-from database.postgres import sessionmaker
+from database.postgres import Base
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import Session
 from testcontainers.postgres import PostgresContainer
@@ -36,12 +34,12 @@ class BaseTestSettings:
             )
             yield postgres
 
-    # @pytest.fixture(autouse=True)
-    # def truncate_tables(self, db_session: Session):
-    #     with db_session as connection:
-    #         for table in Base.metadata.tables:
-    #             stm = text(f'TRUNCATE TABLE "{table}" RESTART IDENTITY CASCADE')
-    #             connection.execute(statement=stm)
+    @pytest.fixture(autouse=True)
+    def truncate_tables(self, db_session: Session):
+        with db_session as connection:
+            for table in Base.metadata.tables:
+                stm = text(f'TRUNCATE TABLE "{table}" RESTART IDENTITY CASCADE')
+                connection.execute(statement=stm)
 
     @pytest.fixture(scope="session")
     def db(self, postgres_container: PostgresContainer):

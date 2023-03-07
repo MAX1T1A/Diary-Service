@@ -8,8 +8,3 @@ class UserServices(BaseService):
 
 
 user_service: UserServices = UserServices()
-
-
-def get_user_service() -> UserServices:
-    return user_service
-
