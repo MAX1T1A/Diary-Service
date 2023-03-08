@@ -1,12 +1,14 @@
 import pytest
 from fastapi import FastAPI
+from fastapi.testclient import TestClient
 from testcontainers.core.waiting_utils import wait_for_logs
-from database.postgres import Base
-from core.config import settings
 from sqlalchemy import create_engine, text, Engine
 from testcontainers.postgres import PostgresContainer
+
 from main import build_app
-from fastapi.testclient import TestClient
+from database.postgres import Base
+from core.config import settings
+from dictionary import CORRECT_REGISTER_DATA
 
 
 @pytest.fixture(scope="session")
@@ -25,7 +27,7 @@ def provide_engine_singleton(postgres_container: PostgresContainer) -> Engine:
     yield engine
 
 
-@pytest.fixture(scope="function", autouse=True)
+@pytest.fixture(scope="module", autouse=True)
 def truncate_tables(provide_engine_singleton) -> None:
     with provide_engine_singleton.begin() as connection:
         for table in ("user", "diary", "page"):

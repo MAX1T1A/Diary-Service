@@ -9,6 +9,7 @@ class JWTSettings(BaseSettings):
     secret_key: str
     algorithm: str
     active_time: int
+    token: str
 
 
 class PostgresSettings(BaseSettings):

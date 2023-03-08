@@ -17,7 +17,7 @@ class UserInSchemas(BaseModel):
     @validator("password2")
     def password_match(cls, password2, values):
         if 'password' in values and password2 != values["password"]:
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Passwords don't match.")
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Passwords don't match.")
         return password2
 
 
