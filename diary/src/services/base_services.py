@@ -1,7 +1,5 @@
 from typing import List
 
-from database.postgres import Session
-
 
 class BaseService:
     _model = None

@@ -5,8 +5,9 @@ from fastapi import APIRouter, Depends, status, HTTPException
 from api.v1.utils.auth_bearer import JWTBearer
 from models.models import User
 from models.schemas import PageGet, PageUniversal
-from services.diary_services import DiaryServices, get_diary_service
-from services.page_services import get_page_service, PageServices
+from services.diary_services import DiaryServices
+from services.page_services import PageServices
+from services.providers import stub_diary_service, stub_page_service
 
 router = APIRouter()
 
@@ -14,9 +15,9 @@ router = APIRouter()
 @router.get("/diary/{diary_id}/page")
 def get_list_pages(
         diary_id: int,
-        page_service: PageServices = Depends(get_page_service),
+        page_service: PageServices = Depends(stub_page_service),
         author: User = Depends(JWTBearer()),
-        diary_service: DiaryServices = Depends(get_diary_service)) -> List[PageGet]:
+        diary_service: DiaryServices = Depends(stub_diary_service)) -> List[PageGet]:
 
     diary = diary_service.find_one(id=diary_id, user_id=author)
     if not diary:
@@ -28,9 +29,9 @@ def get_list_pages(
 def add_page(
         diary_id: int,
         request: PageUniversal,
-        page_service: PageServices = Depends(get_page_service),
+        page_service: PageServices = Depends(stub_page_service),
         author: User = Depends(JWTBearer()),
-        diary_service: DiaryServices = Depends(get_diary_service)) -> int:
+        diary_service: DiaryServices = Depends(stub_diary_service)) -> int:
 
     diary = diary_service.find_one(id=diary_id, user_id=author)
     if not diary:
@@ -44,9 +45,9 @@ def update_page(
         diary_id: int,
         page_id: int,
         request: PageUniversal,
-        page_service: PageServices = Depends(get_page_service),
+        page_service: PageServices = Depends(stub_page_service),
         author: User = Depends(JWTBearer()),
-        diary_service: DiaryServices = Depends(get_diary_service)) -> int:
+        diary_service: DiaryServices = Depends(stub_diary_service)) -> int:
 
     diary = diary_service.find_one(id=diary_id, user_id=author)
     if not diary:
@@ -62,9 +63,9 @@ def update_page(
 def delete_page(
         diary_id: int,
         page_id: int,
-        page_service: PageServices = Depends(get_page_service),
+        page_service: PageServices = Depends(stub_page_service),
         author: User = Depends(JWTBearer()),
-        diary_service: DiaryServices = Depends(get_diary_service)) -> int:
+        diary_service: DiaryServices = Depends(stub_diary_service)) -> int:
 
     diary = diary_service.find_one(id=diary_id, user_id=author)
     if not diary:

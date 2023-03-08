@@ -56,8 +56,9 @@ if __name__ == '__main__':
 Здесь уже нужно в теле запроса послать название нашего словаря.
 
 ### Пример реализации части API
+
 ```python
-from fastapi import FastAPI, HTTPException
+from diary import FastAPI, HTTPException
 from pydantic import BaseModel
 
 app = FastAPI()
