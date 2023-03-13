@@ -1,6 +1,15 @@
-from core.config import settings
+from dataclasses import dataclass, asdict
+from core.hashing import Hash
 
-headers = {"Authorization": f"Bearer {settings.jwt_token.token}"}
+
+@dataclass
+class TestUser:
+    email: str
+    name: str
+    password: str
+
+
+test_user = asdict(TestUser(email="max1t1aldan@gmail.com", name="max1t1adan", password=Hash().bcrypt("stringst")))
 
 
 # User values __________________________________________________________________________________________
@@ -21,22 +30,6 @@ CORRECT_REGISTER_DATA = [
         201
     ),
 ]
-
-CORRECT_DIARY_DATA = [
-    (
-        {"name": "berupor"},
-        201
-    ),
-    (
-        {"name": "valdimir"},
-        201
-    ),
-    (
-        {"name": "husan"},
-        201
-    ),
-]
-
 # -----------------------
 CORRECT_LOGIN_DATA = [
     (
@@ -85,5 +78,3 @@ WRONG_LOGIN_DATA = [
         422
     ),
 ]
-
-

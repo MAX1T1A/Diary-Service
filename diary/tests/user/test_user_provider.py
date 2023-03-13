@@ -1,5 +1,5 @@
 import pytest
-from dictionary import CORRECT_REGISTER_DATA, CORRECT_LOGIN_DATA, WRONG_REGISTER_DATA, WRONG_LOGIN_DATA
+from test_data.user_data import CORRECT_REGISTER_DATA, CORRECT_LOGIN_DATA, WRONG_REGISTER_DATA, WRONG_LOGIN_DATA
 
 
 class TestUserRoutes:
@@ -11,10 +11,9 @@ class TestUserRoutes:
         assert response.json() == expected
 
     @pytest.mark.parametrize("test_input, expected", CORRECT_LOGIN_DATA)
-    def test_user_login(self, test_input,  expected, client):
+    def test_user_login(self, test_input, expected, client):
         response = client.post("api/v1/login", json=test_input)
 
-        print(response.json())
         assert response.status_code == expected
         assert type(response.json()) == dict
         assert type(response.json()["access_token"]) == str
