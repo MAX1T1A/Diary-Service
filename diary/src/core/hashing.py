@@ -9,3 +9,10 @@ class Hash:
 
     def verify(self, hashed_password, plain_password):
         return self.pwd_cxt.verify(plain_password, hashed_password)
+
+
+hasher: Hash = Hash()
+
+
+def get_hasher() -> Hash:
+    return hasher

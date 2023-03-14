@@ -1,13 +1,11 @@
 from typing import List
 
-from database.postgres import Session
-
 
 class BaseService:
     _model = None
 
-    def __init__(self):
-        self._session = Session()
+    def __init__(self, session):
+        self._session = session
 
     def find_many(self, **kwargs) -> List[_model]:
         return self._session.query(self._model).filter_by(**kwargs).all()
@@ -29,7 +27,3 @@ class BaseService:
     def delete(self, instance: _model) -> None:
         self._session.delete(instance)
         return self._session.commit()
-
-    @property
-    def session(self) -> Session:
-        return self._session

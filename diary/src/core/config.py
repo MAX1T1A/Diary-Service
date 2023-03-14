@@ -9,6 +9,7 @@ class JWTSettings(BaseSettings):
     secret_key: str
     algorithm: str
     active_time: int
+    token: str
 
 
 class PostgresSettings(BaseSettings):
@@ -19,13 +20,7 @@ class PostgresSettings(BaseSettings):
     password: str
 
 
-class TestPostgresSettings(BaseSettings):
-    dbname: str
-    host: str
-
-
 class Settings(BaseSettings):
-    test_postgres: TestPostgresSettings
     postgres: PostgresSettings
     jwt_token: JWTSettings
 
