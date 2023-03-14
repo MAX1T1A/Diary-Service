@@ -1,9 +1,9 @@
 import pytest
-from test_data.diary_data import CORRECT_DIARY_DATA, TESTING_DIARY, TESTING_PAGE, headers
+from test_data.diary_data import CORRECT_DIARY_DATA, TESTING_PAGE, headers
 
 
 class TestDiaryPageRoutes:
-    @pytest.mark.parametrize("test_input, expected", CORRECT_DIARY_DATA)
+    @pytest.mark.parametrize("test_input, expected", CORRECT_DIARY_DATA[0])
     def test_add_diary(self, test_input, expected, client):
         response = client.post("api/v1/diary", json=test_input, headers=headers)
 
@@ -14,7 +14,7 @@ class TestDiaryPageRoutes:
         response = client.get("api/v1/diary", headers=headers)
 
         assert response.status_code == 200
-        assert response.json() == TESTING_DIARY
+        assert response.json() == CORRECT_DIARY_DATA[1]
 
     def test_update_diary(self, client):
         response = client.put("api/v1/diary/1", json={"name": "max1t1a"}, headers=headers)
