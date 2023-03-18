@@ -24,7 +24,7 @@ Diary Service uses JWT for authentication. This means that when you create an ac
 ## Database
 Diary Service uses Postgres as its database. The database is automatically created when you run the application using Docker Compose, so you don't need to worry about setting up the database yourself.
 
-Contributing
+## Contributing
 Do you want to contribute to Diary Service? That's great! We welcome contributions from anyone who is interested in improving the project. To contribute, simply fork this repository, make your changes, and submit a pull request. Please make sure to follow the existing coding style and include tests for any new functionality.
 
 Thank you for using Diary Service! We hope it helps you stay organized and productive.
