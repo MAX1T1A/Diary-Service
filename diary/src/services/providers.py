@@ -3,8 +3,8 @@ from services.page_services import PageServices
 from services.user_services import UserServices
 from sqlalchemy.orm import sessionmaker
 
-
 # User Stub and Service ________________________________________________
+
 
 def stub_user_service():
     raise NotImplementedError
@@ -26,6 +26,7 @@ def get_diary_service(session: sessionmaker) -> DiaryServices:
 
 
 # Page Stub and Service ________________________________________________
+
 
 def stub_page_service():
     raise NotImplementedError
