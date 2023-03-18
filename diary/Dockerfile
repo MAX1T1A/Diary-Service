@@ -23,4 +23,4 @@ ENV PYTHONPATH "${PYTHONPATH}:/src/"
 EXPOSE 8000
 
 # cmd command
-CMD ["uvicorn", "src.main:application", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "src.asgi:app", "--host", "0.0.0.0", "--port", "8000"]

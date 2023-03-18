@@ -1,5 +1,5 @@
 from fastapi import HTTPException, status
-from pydantic import BaseModel, constr, EmailStr, validator
+from pydantic import BaseModel, EmailStr, constr, validator
 
 
 class UserSchemas(BaseModel):
@@ -16,8 +16,10 @@ class UserInSchemas(BaseModel):
 
     @validator("password2")
     def password_match(cls, password2, values):
-        if 'password' in values and password2 != values["password"]:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Passwords don't match.")
+        if "password" in values and password2 != values["password"]:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST, detail="Passwords don't match."
+            )
         return password2
 
 

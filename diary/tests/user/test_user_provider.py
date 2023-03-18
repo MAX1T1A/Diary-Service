@@ -1,5 +1,6 @@
 import pytest
-from test_data.user_data import CORRECT_REGISTER_DATA, CORRECT_LOGIN_DATA, WRONG_REGISTER_DATA, WRONG_LOGIN_DATA
+from test_data.user_data import (CORRECT_LOGIN_DATA, CORRECT_REGISTER_DATA,
+                                 WRONG_LOGIN_DATA, WRONG_REGISTER_DATA)
 
 
 class TestUserRoutes:
