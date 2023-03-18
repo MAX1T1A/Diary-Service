@@ -2,10 +2,9 @@ import time
 from typing import List
 
 import jwt
-from fastapi import Request, HTTPException
-from fastapi.security import HTTPBearer
-
 from core.config import settings
+from fastapi import HTTPException, Request
+from fastapi.security import HTTPBearer
 
 
 def decode_and_verify_jwt(token: str, secret_key: str, algorithms: List[str]) -> dict:
@@ -29,7 +28,9 @@ class JWTBearer(HTTPBearer):
         credentials = await super(JWTBearer, self).__call__(request)
         if credentials:
             if not credentials.scheme == "Bearer":
-                raise HTTPException(status_code=403, detail="Authentication token invalid  scheme.")
+                raise HTTPException(
+                    status_code=403, detail="Authentication token invalid  scheme."
+                )
             user_id = decode_and_verify_jwt(
                 credentials.credentials,
                 settings.jwt_token.secret_key,
