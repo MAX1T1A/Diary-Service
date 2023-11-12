@@ -7,7 +7,7 @@ Are you ready to start using Diary Service? Great! To get started, all you need 
 
 ```bash
 git clone https://github.com/Berupor/diary-service.git
-cd diary-service
+cd Diary-Service
 docker-compose up --build
 ```
 
