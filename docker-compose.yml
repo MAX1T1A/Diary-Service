@@ -1,18 +1,20 @@
-version: "3"
+version: "3.8"
 
 services:
-  web:
+  diary_service:
+    container_name: diary_diary_service
     build: diary
-    volumes:
-      - .:/app
     env_file:
       - .env
     ports:
       - "8000:8000"
+    volumes:
+      - diary/src
     depends_on:
-      - db
+      - diary_db
 
-  db:
+  diary_db:
+    container_name: diary_diary_db
     image: postgres:15
     hostname: ${POSTGRES__HOST}
     ports:

@@ -3,24 +3,16 @@
 # pull the official docker image
 FROM python:3.11
 
-# set env variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
-
-# install dependencies
-COPY requirements.txt .
-
-RUN pip install --upgrade pip \
-    && pip install --no-cache-dir -r requirements.txt
+WORKDIR home
 
 # copy project
-COPY . .
+COPY ./src .
 
-#path app
-ENV PYTHONPATH "${PYTHONPATH}:/src/"
+# copy dependencies
+COPY requirements.txt .
 
-#set port
-EXPOSE 8000
+# install dependencies
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
 # cmd command
-CMD ["uvicorn", "src.asgi:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "asgi:app", "--host", "0.0.0.0", "--port", "8000"]
